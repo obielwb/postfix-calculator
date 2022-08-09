@@ -106,6 +106,7 @@
             this.btnEquals.TabIndex = 5;
             this.btnEquals.Text = "=";
             this.btnEquals.UseVisualStyleBackColor = true;
+            this.btnEquals.Click += new System.EventHandler(this.btnEquals_Click);
             // 
             // btnValue4
             // 
@@ -155,6 +156,7 @@
             this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "C";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnValue3
             // 

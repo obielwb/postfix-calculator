@@ -18,6 +18,31 @@ namespace CalculadoraPosfixa
             InitializeComponent();
         }
 
+        private bool isBalanced(string operationSequence)
+        {
+            StackVector<char> isBalancedStack = new StackVector<char>();
+            foreach (char c in operationSequence)
+            {
+                if (c == '(') {
+                    char bracket = isBalancedStack.Peek();
+                    if (bracket == ')') return false;
+                    isBalancedStack.Push('(');
+                }
+
+                if (c == ')')
+                {
+                    char bracket = isBalancedStack.Peek();
+                    if (bracket != '(') return false;
+
+                    isBalancedStack.Pop();
+                }
+            }
+
+            if (isBalancedStack.Size != 0) return false;
+
+            return true;
+        }
+
         private void txtDisplay_TextChanged(object sender, EventArgs e)
         {
             foreach (char c in txtDisplay.Text)
@@ -28,6 +53,10 @@ namespace CalculadoraPosfixa
                     txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.IndexOf(c));
                 }
             }
+        }
+        private void btnEquals_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void btnValue0_Click(object sender, EventArgs e)
@@ -71,5 +100,9 @@ namespace CalculadoraPosfixa
             txtDisplay.AppendText("9");
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            txtDisplay.Text = "";
+        }
     }
 }
