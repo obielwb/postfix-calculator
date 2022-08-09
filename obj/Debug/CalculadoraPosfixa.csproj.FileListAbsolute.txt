@@ -1,0 +1,11 @@
+C:\Users\u21234\Desktop\CalculadoraPosfixa\bin\Debug\CalculadoraPosfixa.exe.config
+C:\Users\u21234\Desktop\CalculadoraPosfixa\bin\Debug\CalculadoraPosfixa.exe
+C:\Users\u21234\Desktop\CalculadoraPosfixa\bin\Debug\CalculadoraPosfixa.pdb
+C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.csproj.AssemblyReference.cache
+C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.csproj.SuggestedBindingRedirects.cache
+C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.Form1.resources
+C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.Properties.Resources.resources
+C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.csproj.GenerateResource.cache
+C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.csproj.CoreCompileInputs.cache
+C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.exe
+C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.pdb
