@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "63b775eb-ccee-4cf8-9043-31ef4ffb022c": {
+      "ProjectGuid": "63b775eb-ccee-4cf8-9043-31ef4ffb022c",
+      "DisplayName": "CalculadoraPosfixa",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
