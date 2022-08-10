@@ -51,60 +51,55 @@ namespace CalculadoraPosfixa
             }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            
-        }
-
 
         private void btnZero_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('0');
         }
 
         private void btnUm_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('1');
         }
 
         private void btnDois_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('2');
         }
 
         private void btnTres_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('3');
         }
 
         private void btnQuatro_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('4');
         }
 
         private void btnCinco_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('5');
         }
 
         private void btnSeis_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('6');
         }
 
         private void btnSete_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('7');
         }
 
         private void btnOito_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('8');
         }
 
         private void btnNove_Click(object sender, EventArgs e)
         {
-
+            PrintarNoDisplay('9');
         }
 
         private void btnIgual_Click(object sender, EventArgs e)
@@ -116,6 +111,11 @@ namespace CalculadoraPosfixa
         {
             txtDisplay.Clear();
             txtResultado.Clear();
+        }
+
+        void PrintarNoDisplay(char c)
+        {
+            txtDisplay.Text += c;
         }
     }
 }

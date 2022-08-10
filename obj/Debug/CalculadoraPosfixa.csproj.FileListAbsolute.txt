@@ -9,3 +9,14 @@ C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.csproj.G
 C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.csproj.CoreCompileInputs.cache
 C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.exe
 C:\Users\u21234\Desktop\CalculadoraPosfixa\obj\Debug\CalculadoraPosfixa.pdb
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\bin\Debug\CalculadoraPosfixa.exe.config
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\bin\Debug\CalculadoraPosfixa.exe
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\bin\Debug\CalculadoraPosfixa.pdb
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\obj\Debug\CalculadoraPosfixa.csproj.AssemblyReference.cache
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\obj\Debug\CalculadoraPosfixa.csproj.SuggestedBindingRedirects.cache
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\obj\Debug\CalculadoraPosfixa.FormCalculadora.resources
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\obj\Debug\CalculadoraPosfixa.Properties.Resources.resources
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\obj\Debug\CalculadoraPosfixa.csproj.GenerateResource.cache
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\obj\Debug\CalculadoraPosfixa.csproj.CoreCompileInputs.cache
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\obj\Debug\CalculadoraPosfixa.exe
+C:\www\cotuca.unicamp.br\semesters\fourth\ds\postfix-calculator\obj\Debug\CalculadoraPosfixa.pdb
