@@ -6,116 +6,74 @@ namespace CalculadoraPosfixa
 {
     public partial class FormCalculadora : Form
     {
-        private string caracteresPermitidos = "0123456789+-*/^().";
-
         public FormCalculadora()
         {
             InitializeComponent();
         }
 
-        private bool EstaBalanceada(string sequenciaDeOperacao)
+        private bool EstaBalanceada(string expressao)
         {
-            PilhaVetor<char> estaBalanceada = new PilhaVetor<char>();
+            PilhaVetor<char> caracteres = new PilhaVetor<char>();
 
-            foreach (char c in sequenciaDeOperacao)
+            foreach (char caracter in expressao)
             {
-                if (c == '(') {
-                    char parenteses = estaBalanceada.Topo();
-                    if (parenteses == ')') return false;
-                    estaBalanceada.Empilhar('(');
-                }
-
-                if (c == ')')
+                if (caracter == '(' || caracter == ')')
                 {
-                    char parenteses = estaBalanceada.Topo();
-                    if (parenteses != '(') return false;
+                    if (caracteres.EstaVazia)
+                    {
+                        caracteres.Empilhar(caracter);
+                    }
 
-                    estaBalanceada.Desempilhar();
+                    else if (caracteres.Topo() == '(' && caracter == ')')
+                    {
+                        caracteres.Desempilhar();
+                    }
+
+                    else
+                    {
+                        caracteres.Empilhar(caracter);
+                    }
                 }
             }
 
-            if (estaBalanceada.Tamanho != 0) return false;
+            if (caracteres.EstaVazia)
+            {
+                return true;
+            }
 
-            return true;
+            return false;
         }
 
         private void txtDisplay_TextChanged(object sender, EventArgs e)
         {
             foreach (char c in txtDisplay.Text)
             {
-                if (!caracteresPermitidos.Contains(c))
+                if (!"0123456789+-*/^().".Contains(c))
                 {
-                    MessageBox.Show("Caracter inválido digitado!");
+                    MessageBox.Show($"Caracter {c} digitado inválido!");
+
                     txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.IndexOf(c));
                 }
             }
         }
 
-
-        private void btnZero_Click(object sender, EventArgs e)
+        private void CliqueBtn(object sender, EventArgs e)
         {
-            PrintarNoDisplay('0');
-        }
-
-        private void btnUm_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('1');
-        }
-
-        private void btnDois_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('2');
-        }
-
-        private void btnTres_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('3');
-        }
-
-        private void btnQuatro_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('4');
-        }
-
-        private void btnCinco_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('5');
-        }
-
-        private void btnSeis_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('6');
-        }
-
-        private void btnSete_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('7');
-        }
-
-        private void btnOito_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('8');
-        }
-
-        private void btnNove_Click(object sender, EventArgs e)
-        {
-            PrintarNoDisplay('9');
+            txtDisplay.Text += (sender as Button).Text;
         }
 
         private void btnIgual_Click(object sender, EventArgs e)
         {
-   
+            if (!EstaBalanceada(txtDisplay.Text))
+            {
+                MessageBox.Show("A expressão indicada não está balanceada!");
+            }
         }
 
         private void btnLimpar_Click(object sender, EventArgs e)
         {
             txtDisplay.Clear();
             txtResultado.Clear();
-        }
-
-        void PrintarNoDisplay(char c)
-        {
-            txtDisplay.Text += c;
         }
     }
 }
