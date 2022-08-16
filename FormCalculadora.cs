@@ -17,7 +17,7 @@ namespace CalculadoraPosfixa
             {
                 if (!".0123456789+-*/^()".Contains(c))
                 {
-                    MessageBox.Show($"Caracter {c} digitado inválido!");
+                    MessageBox.Show($"Caractere '{c}' digitado inválido!");
 
                     txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.IndexOf(c));
                 }
@@ -31,30 +31,30 @@ namespace CalculadoraPosfixa
 
         private bool EstaBalanceada(string expressao)
         {
-            PilhaVetor<char> caracteres = new PilhaVetor<char>();
+            PilhaVetor<char> caracterees = new PilhaVetor<char>();
 
-            foreach (char caracter in expressao)
+            foreach (char caractere in expressao)
             {
-                if (caracter == '(' || caracter == ')')
+                if (caractere == '(' || caractere == ')')
                 {
-                    if (caracteres.EstaVazia)
+                    if (caracterees.EstaVazia)
                     {
-                        caracteres.Empilhar(caracter);
+                        caracterees.Empilhar(caractere);
                     }
 
-                    else if (caracteres.Topo() == '(' && caracter == ')')
+                    else if (caracterees.Topo() == '(' && caractere == ')')
                     {
-                        caracteres.Desempilhar();
+                        caracterees.Desempilhar();
                     }
 
                     else
                     {
-                        caracteres.Empilhar(caracter);
+                        caracterees.Empilhar(caractere);
                     }
                 }
             }
 
-            if (caracteres.EstaVazia)
+            if (caracterees.EstaVazia)
             {
                 return true;
             }
@@ -85,18 +85,21 @@ namespace CalculadoraPosfixa
                         int j = i + 1;
                         bool fim = false;
 
-                        while (".0123456789".Contains(expressao[j]) && !fim)
+                        if (j < expressao.Length)
                         {
-                            valor += expressao[j];
-
-                            if (j + 1 == expressao.Length)
+                            while (".0123456789".Contains(expressao[j]) && !fim)
                             {
-                                fim = true;
-                            }
+                                valor += expressao[j];
 
-                            else
-                            {
-                                j++;
+                                if (j + 1 == expressao.Length)
+                                {
+                                    fim = true;
+                                }
+
+                                else
+                                {
+                                    j++;
+                                }
                             }
                         }
 
@@ -109,48 +112,76 @@ namespace CalculadoraPosfixa
 
                 string posfixa = "";
                 PilhaVetor<char> umaPilha = new PilhaVetor<char>();
-                char operadorComMaiorPrecedencia = '';
+                char operador = '\0';
 
                 for (int indice = 0; indice < infixa.Length; indice++)
                 {
-                    char caracter = infixa[indice];
+                    char caractere = infixa[indice];
 
-                    if (!"+-*/()".Contains(caracter))
-                        posfixa += caracter;
+                    if (!"+-*/()".Contains(caractere))
+                        posfixa += caractere;
 
-                    else // operador
+                    else
                     {
                         bool parar = false;
 
-                        while (!parar && !umaPilha.EstaVazia && TerPrecedencia(umaPilha.Topo(), caracter))
+                        while (!parar && !umaPilha.EstaVazia && !TerPrecedencia(umaPilha.Topo(), caractere))
                         {
-                            operadorComMaiorPrecedencia = umaPilha.Desempilhar();
+                            operador = umaPilha.Desempilhar();
 
-                            if (operadorComMaiorPrecedencia != '(')
-                                posfixa += operadorComMaiorPrecedencia;
+                            if (operador != '(')
+                                posfixa += operador;
                             else
                                 parar = true;
                         }
 
-                        if (caracter != ')')
-                            umaPilha.Empilhar(caracter);
+                        if (caractere != ')')
+                            umaPilha.Empilhar(caractere);
 
-                        else // fará isso QUANDO o Pilha[TOPO] = '('
-                            operadorComMaiorPrecedencia = umaPilha.Desempilhar();
+                        else
+                            operador = umaPilha.Desempilhar();
                     }
-                } // for
-
-                while (!umaPilha.EstaVazia) // Descarrega a Pilha Para a Saída
-                {
-                    operadorComMaiorPrecedencia = umaPilha.Desempilhar();
-
-                    if (operadorComMaiorPrecedencia != '(')
-                        posfixa += operadorComMaiorPrecedencia;
                 }
 
+                while (!umaPilha.EstaVazia)
+                {
+                    operador = umaPilha.Desempilhar();
 
-                txtResultado.Text = infixa;
+                    if (operador != '(')
+                        posfixa += operador;
+                }
+
+                txtResultado.Text = posfixa;
             }
+        }
+
+        private bool TerPrecedencia(char caracterePilha, char caractereLido)
+        {
+            if (caracterePilha == '(')
+                if (caractereLido == ')')
+                    return true;
+                else
+                    return false;
+
+            else if (caracterePilha == '^')
+                if (caractereLido == '(' || caractereLido == '^')
+                    return false;
+                else
+                    return true;
+
+            else if (caracterePilha == '*' || caracterePilha == '/')
+                if (caractereLido == '(' || caractereLido == '^')
+                    return false;
+                else
+                    return true;
+
+            else if (caracterePilha == '+' || caracterePilha == '-')
+                if (caractereLido == '(' || caractereLido == '^' || caractereLido == '*' || caractereLido == '/')
+                    return false;
+                else
+                    return true;
+
+            return false;
         }
 
         private void btnLimpar_Click(object sender, EventArgs e)
