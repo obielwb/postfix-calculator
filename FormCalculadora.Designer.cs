@@ -50,7 +50,7 @@
             this.btnDecimal = new System.Windows.Forms.Button();
             this.btnFechaParenteses = new System.Windows.Forms.Button();
             this.btnAbreParentese = new System.Windows.Forms.Button();
-            this.lbSequence = new System.Windows.Forms.Label();
+            this.lbSequencias = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtDisplay
@@ -65,6 +65,7 @@
             // 
             this.txtResultado.Location = new System.Drawing.Point(12, 38);
             this.txtResultado.Name = "txtResultado";
+            this.txtResultado.ReadOnly = true;
             this.txtResultado.Size = new System.Drawing.Size(319, 20);
             this.txtResultado.TabIndex = 1;
             // 
@@ -268,21 +269,21 @@
             this.btnAbreParentese.UseVisualStyleBackColor = true;
             this.btnAbreParentese.Click += new System.EventHandler(this.CliqueBtn);
             // 
-            // lbSequence
+            // lbSequencias
             // 
-            this.lbSequence.AutoSize = true;
-            this.lbSequence.Location = new System.Drawing.Point(10, 65);
-            this.lbSequence.Name = "lbSequence";
-            this.lbSequence.Size = new System.Drawing.Size(41, 13);
-            this.lbSequence.TabIndex = 22;
-            this.lbSequence.Text = "Pósfixa";
+            this.lbSequencias.AutoSize = true;
+            this.lbSequencias.Location = new System.Drawing.Point(10, 65);
+            this.lbSequencias.Name = "lbSequencias";
+            this.lbSequencias.Size = new System.Drawing.Size(99, 13);
+            this.lbSequencias.TabIndex = 22;
+            this.lbSequencias.Text = "Infixa: --- Pósfixa: ---";
             // 
             // FormCalculadora
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(344, 287);
-            this.Controls.Add(this.lbSequence);
+            this.Controls.Add(this.lbSequencias);
             this.Controls.Add(this.btnAbreParentese);
             this.Controls.Add(this.btnFechaParenteses);
             this.Controls.Add(this.btnDecimal);
@@ -336,7 +337,7 @@
         private System.Windows.Forms.Button btnDecimal;
         private System.Windows.Forms.Button btnFechaParenteses;
         private System.Windows.Forms.Button btnAbreParentese;
-        private System.Windows.Forms.Label lbSequence;
+        private System.Windows.Forms.Label lbSequencias;
     }
 }
 

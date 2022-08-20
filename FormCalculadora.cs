@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace CalculadoraPosfixa
 {
@@ -13,13 +14,13 @@ namespace CalculadoraPosfixa
 
         private void txtDisplay_TextChanged(object sender, EventArgs e)
         {
-            foreach (char c in txtDisplay.Text)
+            foreach (char caractere in txtDisplay.Text)
             {
-                if (!".0123456789+-*/^()".Contains(c))
+                if (!".0123456789+-*/^()".Contains(caractere))
                 {
-                    MessageBox.Show($"Caractere '{c}' digitado inválido!");
+                    MessageBox.Show($"Caractere '{caractere}' digitado inválido!");
 
-                    txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.IndexOf(c));
+                    txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.IndexOf(caractere));
                 }
             }
         }
@@ -38,26 +39,18 @@ namespace CalculadoraPosfixa
                 if (caractere == '(' || caractere == ')')
                 {
                     if (caracterees.EstaVazia)
-                    {
                         caracterees.Empilhar(caractere);
-                    }
 
                     else if (caracterees.Topo() == '(' && caractere == ')')
-                    {
                         caracterees.Desempilhar();
-                    }
 
                     else
-                    {
                         caracterees.Empilhar(caractere);
-                    }
                 }
             }
 
             if (caracterees.EstaVazia)
-            {
                 return true;
-            }
 
             return false;
         }
@@ -65,129 +58,181 @@ namespace CalculadoraPosfixa
         private void btnIgual_Click(object sender, EventArgs e)
         {
             if (!EstaBalanceada(txtDisplay.Text))
-            {
-                MessageBox.Show("A expressão indicada não está balanceada!");
-            }
+                MessageBox.Show("A expressão não está balanceada!");
 
             else
             {
                 string expressao = txtDisplay.Text;
-                string infixa = expressao;
+                
+                string infixa = ConverterParaInfixa(expressao, out double[] valores);
+                string posfixa = ConverterParaPosfixa(infixa);
+                double resultado = CalcularResultado(posfixa, valores);
 
-                double[] valores = new double[txtDisplay.Text.Length];
-                int v = 0;
-
-                for (int i = 0; i < expressao.Length; i++)
-                {
-                    if (".0123456789".Contains(expressao[i]))
-                    {
-                        string valor = expressao[i].ToString();
-                        int j = i + 1;
-                        bool fim = false;
-
-                        if (j < expressao.Length)
-                        {
-                            while (".0123456789".Contains(expressao[j]) && !fim)
-                            {
-                                valor += expressao[j];
-
-                                if (j + 1 == expressao.Length)
-                                {
-                                    fim = true;
-                                }
-
-                                else
-                                {
-                                    j++;
-                                }
-                            }
-                        }
-
-                        valores[v] = double.Parse(valor);
-                        infixa = infixa.Replace(valor.ToString(), ((char)(65 + v)).ToString());
-                        v++;
-                        i = j;
-                    }
-                }
-
-                string posfixa = "";
-                PilhaVetor<char> umaPilha = new PilhaVetor<char>();
-                char operador = '\0';
-
-                for (int indice = 0; indice < infixa.Length; indice++)
-                {
-                    char caractere = infixa[indice];
-
-                    if (!"+-*/()".Contains(caractere))
-                        posfixa += caractere;
-
-                    else
-                    {
-                        bool parar = false;
-
-                        while (!parar && !umaPilha.EstaVazia && !TerPrecedencia(umaPilha.Topo(), caractere))
-                        {
-                            operador = umaPilha.Desempilhar();
-
-                            if (operador != '(')
-                                posfixa += operador;
-                            else
-                                parar = true;
-                        }
-
-                        if (caractere != ')')
-                            umaPilha.Empilhar(caractere);
-
-                        else
-                            operador = umaPilha.Desempilhar();
-                    }
-                }
-
-                while (!umaPilha.EstaVazia)
-                {
-                    operador = umaPilha.Desempilhar();
-
-                    if (operador != '(')
-                        posfixa += operador;
-                }
-
-                txtResultado.Text = posfixa;
+                lbSequencias.Text = $"Infixa: {infixa} Pósfixa: {posfixa}";
+                txtResultado.Text = resultado.ToString("0.00");
             }
         }
 
-        private bool TerPrecedencia(char caracterePilha, char caractereLido)
+        private string ConverterParaInfixa(string expressao, out double[] valores)
         {
-            if (caracterePilha == '(')
-                if (caractereLido == ')')
-                    return true;
-                else
-                    return false;
+            string infixa = expressao;
 
-            else if (caracterePilha == '^')
-                if (caractereLido == '(' || caractereLido == '^')
-                    return false;
-                else
-                    return true;
+            valores = new double[expressao.Length];
+            int v = 0;
 
-            else if (caracterePilha == '*' || caracterePilha == '/')
-                if (caractereLido == '(' || caractereLido == '^')
-                    return false;
-                else
-                    return true;
+            for (int i = 0; i < expressao.Length; i++)
+            {
+                if (".0123456789".Contains(expressao[i]))
+                {
+                    string valor = expressao[i].ToString();
+                    int j = i + 1;
+                    bool fim = false;
 
-            else if (caracterePilha == '+' || caracterePilha == '-')
-                if (caractereLido == '(' || caractereLido == '^' || caractereLido == '*' || caractereLido == '/')
-                    return false;
-                else
-                    return true;
+                    if (j < expressao.Length)
+                    {
+                        while (".0123456789".Contains(expressao[j]) && !fim)
+                        {
+                            valor += expressao[j];
 
-            return false;
+                            if (j + 1 == expressao.Length)
+                                fim = true;
+
+                            else
+                                j++;
+                        }
+                    }
+
+                    Regex regex = new Regex(Regex.Escape(valor.ToString()));
+                    infixa = regex.Replace(infixa, ((char)(65 + v)).ToString(), 1);
+
+                    valores[v++] = double.Parse(valor);
+                    i = j;
+                }
+            }
+
+            return infixa;
+        }
+
+        private string ConverterParaPosfixa(string infixa)
+        {
+            string posfixa = "";
+
+            PilhaVetor<char> pilhaPosfixa = new PilhaVetor<char>();
+
+            for (int i = 0; i < infixa.Length; ++i)
+            {
+                char caractere = infixa[i];
+
+                if (!"+-*/()".Contains(caractere))
+                    posfixa += caractere;
+
+                else
+                {
+                    if (caractere == '(')
+                        pilhaPosfixa.Empilhar(caractere);
+
+                    else if (caractere == ')')
+                    {
+                        while (!pilhaPosfixa.EstaVazia && pilhaPosfixa.Topo() != '(')
+                            posfixa += pilhaPosfixa.Desempilhar();
+
+                        if (!pilhaPosfixa.EstaVazia && pilhaPosfixa.Topo() != '(')
+                        {
+                            posfixa = "Expressão inválida!";
+
+                            break;
+                        }
+
+                        else
+                            pilhaPosfixa.Desempilhar();
+                    }
+
+                    else
+                    {
+                        while (!pilhaPosfixa.EstaVazia && Precedencia(caractere) <= Precedencia(pilhaPosfixa.Topo()))
+                            posfixa += pilhaPosfixa.Desempilhar();
+
+                        pilhaPosfixa.Empilhar(caractere);
+                    }
+                }
+            }
+
+            while (!pilhaPosfixa.EstaVazia)
+                posfixa += pilhaPosfixa.Desempilhar();
+
+            return posfixa;
+        }
+
+        private int Precedencia(char caractere)
+        {
+            if (caractere == '+' || caractere == '-')
+                return 1;
+
+            else if (caractere == '*' || caractere == '/')
+                return 2;
+
+            else if (caractere == '^')
+                return 3;
+
+            else
+                return 0;
+        }
+
+        private double CalcularResultado(string posfixa, double[] valores)
+        {
+            PilhaVetor<double> pilhaResultado = new PilhaVetor<double>();
+
+            for (int i = 0; i < posfixa.Length; i++)
+            {
+                char caractere = posfixa[i];
+
+                if (!"+-*/^".Contains(caractere))
+                {
+                    double operando = valores[caractere - 65];
+
+                    pilhaResultado.Empilhar(operando);
+                }
+
+                else
+                {
+                    double operandoDois = pilhaResultado.Desempilhar();
+                    double operandoUm = pilhaResultado.Desempilhar();
+
+                    double operacao = 0;
+
+                    switch (caractere)
+                    {
+                        case '+':
+                            operacao = operandoUm + operandoDois;
+                            break;
+                        case '-':
+                            operacao = operandoUm - operandoDois;
+                            break;
+                        case '*':
+                            operacao = operandoUm * operandoDois;
+                            break;
+                        case '/':
+                            operacao = operandoUm / operandoDois;
+                            break;
+                        case '^':
+                            operacao = Math.Pow(operandoUm, operandoDois);
+                            break;
+                    }
+
+                    pilhaResultado.Empilhar(operacao);
+                }
+            }
+
+            double resultado = pilhaResultado.Desempilhar();
+
+            return resultado;
         }
 
         private void btnLimpar_Click(object sender, EventArgs e)
         {
             txtDisplay.Clear();
             txtResultado.Clear();
+            lbSequencias.Text = "Infixa: --- Pósfixa: ---";
         }
     }
 }
