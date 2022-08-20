@@ -20,14 +20,70 @@ namespace CalculadoraPosfixa
                 {
                     MessageBox.Show($"Caractere '{caractere}' digitado inválido!");
 
-                    txtVisor.Text = txtVisor.Text.Substring(0, txtVisor.Text.IndexOf(caractere));
+                    int indiceCaractere = txtVisor.Text.IndexOf(caractere);
+
+                    if (indiceCaractere >= 0)
+                        txtVisor.Text = txtVisor.Text.Substring(0, indiceCaractere);
+
+                    else
+                        txtVisor.Clear();
                 }
             }
         }
 
+        private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char caractereDigitado = e.KeyChar;
+
+            VerificarOperadores(caractereDigitado);
+        }
+
+        private bool VerificarOperadores(char caractereDigitado)
+        {
+            if (txtVisor.Text.Length >= 2)
+            {
+                char ultimoCaractere = txtVisor.Text[txtVisor.Text.Length - 1];
+
+                if ("+-*/^".Contains(ultimoCaractere) && "+-*/^".Contains(caractereDigitado))
+                {
+                    MessageBox.Show($"Dois operadores não podem ser subsequentes!");
+
+                    txtVisor.Clear();
+
+                    return false;
+                }
+
+                return true;
+            }
+
+            else
+                return true;
+        }
+
         private void CliqueBtn(object sender, EventArgs e)
         {
-            txtVisor.Text += (sender as Button).Text;
+            char caractereDigitado = (sender as Button).Text[0];
+
+            if (VerificarOperadores(caractereDigitado))
+                txtVisor.Text += caractereDigitado;
+        }
+
+        private void btnIgual_Click(object sender, EventArgs e)
+        {
+            if (!EstaBalanceada(txtVisor.Text))
+                MessageBox.Show("A expressão não está balanceada!");
+
+            else
+            {
+                string expressao = txtVisor.Text;
+
+                string infixa = ConverterParaInfixa(expressao, out double[] valores);
+                string posfixa = ConverterParaPosfixa(infixa);
+                double resultado = CalcularResultado(posfixa, valores);
+
+                lbSequencias.Text = $"Infixa: {infixa} Pósfixa: {posfixa}";
+                txtResultado.Text = resultado.ToString("0.00");
+            }
         }
 
         private bool EstaBalanceada(string expressao)
@@ -53,24 +109,6 @@ namespace CalculadoraPosfixa
                 return true;
 
             return false;
-        }
-
-        private void btnIgual_Click(object sender, EventArgs e)
-        {
-            if (!EstaBalanceada(txtVisor.Text))
-                MessageBox.Show("A expressão não está balanceada!");
-
-            else
-            {
-                string expressao = txtVisor.Text;
-
-                string infixa = ConverterParaInfixa(expressao, out double[] valores);
-                string posfixa = ConverterParaPosfixa(infixa);
-                double resultado = CalcularResultado(posfixa, valores);
-
-                lbSequencias.Text = $"Infixa: {infixa} Pósfixa: {posfixa}";
-                txtResultado.Text = resultado.ToString("0.00");
-            }
         }
 
         private string ConverterParaInfixa(string expressao, out double[] valores)
