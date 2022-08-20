@@ -63,7 +63,7 @@ namespace CalculadoraPosfixa
             else
             {
                 string expressao = txtDisplay.Text;
-                
+
                 string infixa = ConverterParaInfixa(expressao, out double[] valores);
                 string posfixa = ConverterParaPosfixa(infixa);
                 double resultado = CalcularResultado(posfixa, valores);
@@ -198,34 +198,32 @@ namespace CalculadoraPosfixa
                     double operandoDois = pilhaResultado.Desempilhar();
                     double operandoUm = pilhaResultado.Desempilhar();
 
-                    double operacao = 0;
+                    double resultado = 0;
 
                     switch (caractere)
                     {
                         case '+':
-                            operacao = operandoUm + operandoDois;
+                            resultado = operandoUm + operandoDois;
                             break;
                         case '-':
-                            operacao = operandoUm - operandoDois;
+                            resultado = operandoUm - operandoDois;
                             break;
                         case '*':
-                            operacao = operandoUm * operandoDois;
+                            resultado = operandoUm * operandoDois;
                             break;
                         case '/':
-                            operacao = operandoUm / operandoDois;
+                            resultado = operandoUm / operandoDois;
                             break;
                         case '^':
-                            operacao = Math.Pow(operandoUm, operandoDois);
+                            resultado = Math.Pow(operandoUm, operandoDois);
                             break;
                     }
 
-                    pilhaResultado.Empilhar(operacao);
+                    pilhaResultado.Empilhar(resultado);
                 }
             }
 
-            double resultado = pilhaResultado.Desempilhar();
-
-            return resultado;
+            return pilhaResultado.Desempilhar();
         }
 
         private void btnLimpar_Click(object sender, EventArgs e)
