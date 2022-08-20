@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtDisplay = new System.Windows.Forms.TextBox();
+            this.txtVisor = new System.Windows.Forms.TextBox();
             this.txtResultado = new System.Windows.Forms.TextBox();
             this.btnZero = new System.Windows.Forms.Button();
             this.btnUm = new System.Windows.Forms.Button();
@@ -53,13 +53,13 @@
             this.lbSequencias = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // txtDisplay
+            // txtVisor
             // 
-            this.txtDisplay.Location = new System.Drawing.Point(12, 12);
-            this.txtDisplay.Name = "txtDisplay";
-            this.txtDisplay.Size = new System.Drawing.Size(319, 20);
-            this.txtDisplay.TabIndex = 0;
-            this.txtDisplay.TextChanged += new System.EventHandler(this.txtDisplay_TextChanged);
+            this.txtVisor.Location = new System.Drawing.Point(12, 12);
+            this.txtVisor.Name = "txtVisor";
+            this.txtVisor.Size = new System.Drawing.Size(319, 20);
+            this.txtVisor.TabIndex = 0;
+            this.txtVisor.TextChanged += new System.EventHandler(this.txtDisplay_TextChanged);
             // 
             // txtResultado
             // 
@@ -305,7 +305,7 @@
             this.Controls.Add(this.btnUm);
             this.Controls.Add(this.btnZero);
             this.Controls.Add(this.txtResultado);
-            this.Controls.Add(this.txtDisplay);
+            this.Controls.Add(this.txtVisor);
             this.Name = "FormCalculadora";
             this.Text = "Calculadora";
             this.ResumeLayout(false);
@@ -315,7 +315,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtDisplay;
+        private System.Windows.Forms.TextBox txtVisor;
         private System.Windows.Forms.TextBox txtResultado;
         private System.Windows.Forms.Button btnZero;
         private System.Windows.Forms.Button btnUm;

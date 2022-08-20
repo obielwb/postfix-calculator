@@ -14,20 +14,20 @@ namespace CalculadoraPosfixa
 
         private void txtDisplay_TextChanged(object sender, EventArgs e)
         {
-            foreach (char caractere in txtDisplay.Text)
+            foreach (char caractere in txtVisor.Text)
             {
                 if (!".0123456789+-*/^()".Contains(caractere))
                 {
                     MessageBox.Show($"Caractere '{caractere}' digitado inválido!");
 
-                    txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.IndexOf(caractere));
+                    txtVisor.Text = txtVisor.Text.Substring(0, txtVisor.Text.IndexOf(caractere));
                 }
             }
         }
 
         private void CliqueBtn(object sender, EventArgs e)
         {
-            txtDisplay.Text += (sender as Button).Text;
+            txtVisor.Text += (sender as Button).Text;
         }
 
         private bool EstaBalanceada(string expressao)
@@ -57,12 +57,12 @@ namespace CalculadoraPosfixa
 
         private void btnIgual_Click(object sender, EventArgs e)
         {
-            if (!EstaBalanceada(txtDisplay.Text))
+            if (!EstaBalanceada(txtVisor.Text))
                 MessageBox.Show("A expressão não está balanceada!");
 
             else
             {
-                string expressao = txtDisplay.Text;
+                string expressao = txtVisor.Text;
 
                 string infixa = ConverterParaInfixa(expressao, out double[] valores);
                 string posfixa = ConverterParaPosfixa(infixa);
@@ -228,7 +228,7 @@ namespace CalculadoraPosfixa
 
         private void btnLimpar_Click(object sender, EventArgs e)
         {
-            txtDisplay.Clear();
+            txtVisor.Clear();
             txtResultado.Clear();
             lbSequencias.Text = "Infixa: --- Pósfixa: ---";
         }
