@@ -12,60 +12,59 @@ namespace CalculadoraPosfixa
             InitializeComponent();
         }
 
-        private void txtDisplay_TextChanged(object sender, EventArgs e)
+        private void txtVisor_TextChanged(object sender, EventArgs e)
         {
-            foreach (char caractere in txtVisor.Text)
+            string entrada = txtVisor.Text;
+            bool valida = true;
+
+            foreach (char caractere in entrada)
             {
                 if (!".0123456789+-*/^()".Contains(caractere))
                 {
-                    MessageBox.Show($"Caractere '{caractere}' digitado inválido!");
+                    MessageBox.Show($"O caractere '{caractere}' presente na expressão é inválido!");
 
-                    int indiceCaractere = txtVisor.Text.IndexOf(caractere);
-
-                    if (indiceCaractere >= 0)
-                        txtVisor.Text = txtVisor.Text.Substring(0, indiceCaractere);
-
-                    else
-                        txtVisor.Clear();
+                    valida = false;
                 }
             }
+
+            if (!valida)
+                txtVisor.Clear();
+
+            else if (entrada.Length > 0)
+                ValidarEntrada(entrada[entrada.Length - 1]);
+
+            txtVisor.Focus();
         }
 
-        private void txtVisor_KeyPress(object sender, KeyPressEventArgs e)
+        private void ValidarEntrada(char caractereDigitado)
         {
-            char caractereDigitado = e.KeyChar;
+            string entrada = txtVisor.Text;
 
-            VerificarOperadores(caractereDigitado);
-        }
-
-        private bool VerificarOperadores(char caractereDigitado)
-        {
-            if (txtVisor.Text.Length >= 2)
+            if (entrada.Length > 1)
             {
-                char ultimoCaractere = txtVisor.Text[txtVisor.Text.Length - 1];
+                char penultimoCaractere = entrada[entrada.Length - 2];
 
-                if ("+-*/^".Contains(ultimoCaractere) && "+-*/^".Contains(caractereDigitado))
+                if ("+-*/^".Contains(penultimoCaractere) && "+-*/^".Contains(caractereDigitado))
                 {
                     MessageBox.Show($"Dois operadores não podem ser subsequentes!");
 
-                    txtVisor.Clear();
-
-                    return false;
+                    txtVisor.Text = entrada.Substring(0, entrada.Length - 1);
                 }
-
-                return true;
             }
 
-            else
-                return true;
+            else if ("+-*/^".Contains(caractereDigitado))
+            {
+                MessageBox.Show($"Um operador não pode inicar uma expressão!");
+
+                txtVisor.Clear();
+            }
         }
 
         private void CliqueBtn(object sender, EventArgs e)
         {
             char caractereDigitado = (sender as Button).Text[0];
 
-            if (VerificarOperadores(caractereDigitado))
-                txtVisor.Text += caractereDigitado;
+            txtVisor.Text += caractereDigitado;
         }
 
         private void btnIgual_Click(object sender, EventArgs e)
@@ -88,24 +87,24 @@ namespace CalculadoraPosfixa
 
         private bool EstaBalanceada(string expressao)
         {
-            PilhaVetor<char> caracterees = new PilhaVetor<char>();
+            PilhaVetor<char> caracteres = new PilhaVetor<char>();
 
             foreach (char caractere in expressao)
             {
                 if (caractere == '(' || caractere == ')')
                 {
-                    if (caracterees.EstaVazia)
-                        caracterees.Empilhar(caractere);
+                    if (caracteres.EstaVazia)
+                        caracteres.Empilhar(caractere);
 
-                    else if (caracterees.Topo() == '(' && caractere == ')')
-                        caracterees.Desempilhar();
+                    else if (caracteres.Topo() == '(' && caractere == ')')
+                        caracteres.Desempilhar();
 
                     else
-                        caracterees.Empilhar(caractere);
+                        caracteres.Empilhar(caractere);
                 }
             }
 
-            if (caracterees.EstaVazia)
+            if (caracteres.EstaVazia)
                 return true;
 
             return false;
@@ -113,7 +112,7 @@ namespace CalculadoraPosfixa
 
         private string ConverterParaInfixa(string expressao, out double[] valores)
         {
-            string infixa = expressao;
+            string infixa = expressao.Replace("(-", "(@").Replace("(+", "(");
 
             valores = new double[expressao.Length];
             int v = 0;
@@ -161,7 +160,7 @@ namespace CalculadoraPosfixa
             {
                 char caractere = infixa[i];
 
-                if (!"+-*/()".Contains(caractere))
+                if (!"+-*/^()".Contains(caractere))
                     posfixa += caractere;
 
                 else
@@ -174,15 +173,7 @@ namespace CalculadoraPosfixa
                         while (!pilhaPosfixa.EstaVazia && pilhaPosfixa.Topo() != '(')
                             posfixa += pilhaPosfixa.Desempilhar();
 
-                        if (!pilhaPosfixa.EstaVazia && pilhaPosfixa.Topo() != '(')
-                        {
-                            posfixa = "Expressão inválida!";
-
-                            break;
-                        }
-
-                        else
-                            pilhaPosfixa.Desempilhar();
+                        pilhaPosfixa.Desempilhar();
                     }
 
                     else
@@ -218,6 +209,16 @@ namespace CalculadoraPosfixa
 
         private double CalcularResultado(string posfixa, double[] valores)
         {
+            for (int i = 0; i < posfixa.Length; ++i)
+                if (posfixa[i] == '@')
+                {
+                    int j = i + 1;
+
+                    valores[posfixa[j] - 65] = valores[posfixa[j] - 65] * (-1);
+                }
+
+            posfixa = posfixa.Replace("@", "");
+
             PilhaVetor<double> pilhaResultado = new PilhaVetor<double>();
 
             for (int i = 0; i < posfixa.Length; i++)

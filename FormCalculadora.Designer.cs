@@ -59,8 +59,7 @@
             this.txtVisor.Name = "txtVisor";
             this.txtVisor.Size = new System.Drawing.Size(319, 20);
             this.txtVisor.TabIndex = 0;
-            this.txtVisor.TextChanged += new System.EventHandler(this.txtDisplay_TextChanged);
-            this.txtVisor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtVisor_KeyPress);
+            this.txtVisor.TextChanged += new System.EventHandler(this.txtVisor_TextChanged);
             // 
             // txtResultado
             // 
