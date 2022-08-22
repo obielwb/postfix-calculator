@@ -23,7 +23,6 @@ namespace CalculadoraPosfixa
 
             // percorrimento da entrada para a validação de seus caracteres
             foreach (char caractere in entrada)
-            {
                 // se o caractere for inválido
                 if (!".0123456789+-*/^()".Contains(caractere))
                 {
@@ -31,7 +30,6 @@ namespace CalculadoraPosfixa
 
                     valida = false;
                 }
-            }
 
             // se a entrada não for válida
             if (!valida)
