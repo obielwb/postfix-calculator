@@ -79,7 +79,7 @@ namespace CalculadoraPosfixa
                 double resultado = CalcularResultado(posfixa, valores);
 
                 lbSequencias.Text = $"Infixa: {infixa} Pósfixa: {posfixa}";
-                txtResultado.Text = resultado.ToString("0.00");
+                txtResultado.Text = resultado.ToString();
             }
         }
 
