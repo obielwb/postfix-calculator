@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Gabriel Willian Bartmanovicz - 21234
+// João Pedro Ferreira Barbosa - 21687
+
+using System;
 using System.Linq;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
@@ -12,13 +15,16 @@ namespace CalculadoraPosfixa
             InitializeComponent();
         }
 
+        // observção da mudança do valor do txtVisor
         private void txtVisor_TextChanged(object sender, EventArgs e)
         {
             string entrada = txtVisor.Text;
             bool valida = true;
 
+            // percorrimento da entrada para a validação de seus caracteres
             foreach (char caractere in entrada)
             {
+                // se o caractere for inválido
                 if (!".0123456789+-*/^()".Contains(caractere))
                 {
                     MessageBox.Show($"O caractere '{caractere}' presente na expressão é inválido!");
@@ -27,6 +33,7 @@ namespace CalculadoraPosfixa
                 }
             }
 
+            // se a entrada não for válida
             if (!valida)
                 LimparCampos();
 
@@ -34,95 +41,139 @@ namespace CalculadoraPosfixa
                 ValidarEntrada(entrada[entrada.Length - 1]);
         }
 
+        // método para validar a entrada no txtVisor
         private void ValidarEntrada(char caractereDigitado)
         {
             string entrada = txtVisor.Text;
 
+            // se a entrada tem dois caracteres ou mais
             if (entrada.Length > 1)
             {
                 char penultimoCaractere = entrada[entrada.Length - 2];
 
+                // verificação da presença de dois operadores seguidos
                 if ("+-*/^".Contains(penultimoCaractere) && "+-*/^".Contains(caractereDigitado))
                 {
                     MessageBox.Show($"Dois operadores não podem ser subsequentes!");
 
+                    // recorte do operador inválido
                     txtVisor.Text = entrada.Substring(0, entrada.Length - 1);
                 }
             }
 
+            // verificação da presença de um operador
+            // anterior à presença de um operando,
+            // inválido mesmo para unários
             else if ("+-*/^".Contains(caractereDigitado))
             {
-                MessageBox.Show($"Um operador não pode inicar uma expressão!");
+                MessageBox.Show($"Um operador não pode iniciar uma expressão!");
 
                 txtVisor.Clear();
             }
         }
 
+        // evento clique para os botões de operandos e operadores
         private void CliqueBtn(object sender, EventArgs e)
         {
-            char caractereDigitado = (sender as Button).Text[0];
+            // obtém o caractere a partir do texto do botão,
+            // sendo operando ou operador
+            char caractereDoBotao = (sender as Button).Text[0];
 
-            txtVisor.Text += caractereDigitado;
+            txtVisor.Text += caractereDoBotao;
         }
 
+        // evento click do botão "=" ou igual
         private void btnIgual_Click(object sender, EventArgs e)
         {
-            if (!EstaBalanceada(txtVisor.Text))
-                MessageBox.Show("A expressão não está balanceada!");
+            // verificação do balanceamento dos parenteses da expressão
+            if (!TemParentesesBalanceados(txtVisor.Text))
+                MessageBox.Show("A expressão não tem parênteses balanceados!");
 
             else
             {
                 string expressao = txtVisor.Text;
 
+                // conversão da expressão regular para infixa
                 string infixa = ConverterParaInfixa(expressao, out double[] valores);
+                // conversão da expressão infixa para pósifxa
                 string posfixa = ConverterParaPosfixa(infixa);
+                // calculo do resultado da expressão a partir
+                // da expressão pósfixa e do vetor de valores
                 double resultado = CalcularResultado(posfixa, valores);
 
+                // exibição dos resultados
                 lbSequencias.Text = $"Infixa: {infixa} Pósfixa: {posfixa}";
                 txtResultado.Text = resultado.ToString();
             }
         }
 
-        private bool EstaBalanceada(string expressao)
+        // método para determinar se uma expressão tem parênteses balanceados
+        private bool TemParentesesBalanceados(string expressao)
         {
-            PilhaVetor<char> caracteres = new PilhaVetor<char>();
+            // pilha de parênteses 
+            PilhaVetor<char> parenteses = new PilhaVetor<char>();
 
+            // percorrimento da expressão para o balanceamento dos parênteses
             foreach (char caractere in expressao)
             {
+                // se o caractere "da vez" da expressão for parênteses
                 if (caractere == '(' || caractere == ')')
                 {
-                    if (caracteres.EstaVazia)
-                        caracteres.Empilhar(caractere);
+                    // caso a pilha esteja vazia, é 
+                    // empilhado o primeiro caractere
+                    if (parenteses.EstaVazia)
+                        parenteses.Empilhar(caractere);
 
-                    else if (caracteres.Topo() == '(' && caractere == ')')
-                        caracteres.Desempilhar();
+                    // se há um balanceamento entre o parênteses do topo
+                    // da pilha e o parênteses digitado, a pilha é desempilhada
+                    else if (parenteses.Topo() == '(' && caractere == ')')
+                        parenteses.Desempilhar();
 
+                    // caso contrário, o parênteses é empilhado
                     else
-                        caracteres.Empilhar(caractere);
+                        parenteses.Empilhar(caractere);
                 }
             }
 
-            if (caracteres.EstaVazia)
-                return true;
-
-            return false;
+            // a presença ou não de parênteses na pilha
+            // determina o balanceamento da expressão
+            // EstaVazia: true -> balanceada
+            // EstaVazia: false -> desbalanceada
+            return parenteses.EstaVazia;
         }
 
+        // método para conversão de uma expressão
+        // regular para expressão infixa, retornando um
+        // vetor com os valores extraídos da expressão regular
         private string ConverterParaInfixa(string expressao, out double[] valores)
         {
+            // atribuição dos operadores unários
+            // "-" -> "@"
+            // "+" -> ""
             string infixa = expressao.Replace("(-", "(@").Replace("(+", "(");
 
+            // vetor de valores 
             valores = new double[expressao.Length];
+            // contador v para o vetor de valores
             int v = 0;
 
+            // percorrimento da expressão para extração
+            // dos valores númericos e atribuição de letras
             for (int i = 0; i < expressao.Length; i++)
             {
-                if (".0123456789".Contains(expressao[i]))
+                char caractere = expressao[i];
+
+                // se o caractere é númerico
+                if (".0123456789".Contains(caractere))
                 {
-                    string valor = expressao[i].ToString();
+                    // inicia-se o processo para a obtenção máxima do valor
+                    string valor = caractere.ToString();
                     int j = i + 1;
                     bool fim = false;
 
+                    // j se prolonga até o valor deixar de ser númerico,
+                    // seja tal o fim da expressão ou um operador, concatenando
+                    // os valores númericos no valor
                     if (j < expressao.Length)
                     {
                         while (".0123456789".Contains(expressao[j]) && !fim)
@@ -137,6 +188,8 @@ namespace CalculadoraPosfixa
                         }
                     }
 
+                    // utilização de regex para a substituição do valor para
+                    // sua respectiva letra, relativa à posição do valor
                     Regex regex = new Regex(Regex.Escape(valor.ToString()));
                     infixa = regex.Replace(infixa, ((char)(65 + v)).ToString(), 1);
 
@@ -145,129 +198,171 @@ namespace CalculadoraPosfixa
                 }
             }
 
+            // retorno da expressão regular convertida para infixa
             return infixa;
         }
 
+
+        // método para conversão de uma expressão infixa para pósfixa
         private string ConverterParaPosfixa(string infixa)
         {
             string posfixa = "";
 
-            PilhaVetor<char> pilhaPosfixa = new PilhaVetor<char>();
+            // pilha de operadores
+            PilhaVetor<char> operadores = new PilhaVetor<char>();
 
-            for (int i = 0; i < infixa.Length; ++i)
+            // percorrimento da expressão infixa para conversão
+            // para pósifxa
+            foreach (char caractere in infixa)
             {
-                char caractere = infixa[i];
-
+                // se o caractere é uma letra
                 if (!"+-*/^()".Contains(caractere))
                     posfixa += caractere;
 
+                // se o caractere é um operador
                 else
                 {
                     if (caractere == '(')
-                        pilhaPosfixa.Empilhar(caractere);
+                        operadores.Empilhar(caractere);
 
                     else if (caractere == ')')
                     {
-                        while (!pilhaPosfixa.EstaVazia && pilhaPosfixa.Topo() != '(')
-                            posfixa += pilhaPosfixa.Desempilhar();
+                        // enquanto não haver balanceamento, 
+                        // concatena-se o desempilhamento na expressão pósfixa
+                        while (!operadores.EstaVazia && operadores.Topo() != '(')
+                            posfixa += operadores.Desempilhar();
 
-                        pilhaPosfixa.Desempilhar();
+                        operadores.Desempilhar();
                     }
 
+                    // se o caractere for +, -, *, / ou ^
                     else
                     {
-                        while (!pilhaPosfixa.EstaVazia && Precedencia(caractere) <= Precedencia(pilhaPosfixa.Topo()))
-                            posfixa += pilhaPosfixa.Desempilhar();
+                        // enquanto a pilha não estiver vazia e a precedência do operador
+                        // for menor ou igual que a precedência do topo da pilha,
+                        // concatena-se o desempilhamento na expressão pósfixa
+                        while (
+                            !operadores.EstaVazia &&
+                            Precedencia(caractere) <= Precedencia(operadores.Topo())
+                        )
+                            posfixa += operadores.Desempilhar();
 
-                        pilhaPosfixa.Empilhar(caractere);
+                        operadores.Empilhar(caractere);
                     }
                 }
             }
 
-            while (!pilhaPosfixa.EstaVazia)
-                posfixa += pilhaPosfixa.Desempilhar();
+            // desempilhamento dos operadores remanescentes
+            while (!operadores.EstaVazia)
+                posfixa += operadores.Desempilhar();
 
+            // retorno da expressão infixa convertida para pósfixa
             return posfixa;
         }
 
-        private int Precedencia(char caractere)
+        // método para retornar a precedência númerica de um operador
+        private int Precedencia(char operador)
         {
-            if (caractere == '+' || caractere == '-')
+            // + e - têm precedência númerica 1
+            if (operador == '+' || operador == '-')
                 return 1;
 
-            else if (caractere == '*' || caractere == '/')
+            // * e / têm precedência númerica 2
+            else if (operador == '*' || operador == '/')
                 return 2;
 
-            else if (caractere == '^')
+            // ^ tem precedência númerica 3
+            else if (operador == '^')
                 return 3;
 
+            // outros operadores têm precedência númerica 0
             else
                 return 0;
         }
 
+        // método para calcular o resultado de uma dada expressão
+        // pósfixa através de seu vetor de valores
         private double CalcularResultado(string posfixa, double[] valores)
         {
+            // percorrimento da expressão pósfixa para o tratamento
+            // de operadores unários negativos
             for (int i = 0; i < posfixa.Length; ++i)
+                // se há um operador unário negativo na posição i
                 if (posfixa[i] == '@')
                 {
-                    int j = i + 1;
+                    // a letra que representa o valor unário correspondente a i
+                    // está uma posição a frente, subtraída por 65, resulta na
+                    // posição j relativa ao valor no vetor de valores
+                    int j = posfixa[i + 1] - 65;
 
-                    valores[posfixa[j] - 65] = valores[posfixa[j] - 65] * (-1);
+                    // oposição do valor da posição j 
+                    valores[j] = -1 * valores[j];
                 }
 
+            // remoção dos operadores unários negativos da expressão pósfixa
             posfixa = posfixa.Replace("@", "");
 
-            PilhaVetor<double> pilhaResultado = new PilhaVetor<double>();
+            // pilha de operações
+            PilhaVetor<double> operacoes = new PilhaVetor<double>();
 
-            for (int i = 0; i < posfixa.Length; i++)
+            // percorrimento da expressão pósfixa para realização do cálculo
+            foreach (char caractere in posfixa)
             {
-                char caractere = posfixa[i];
-
+                // se o caractere for uma letra, representando um valor
                 if (!"+-*/^".Contains(caractere))
                 {
+                    // obtém o operando relativo à letra
                     double operando = valores[caractere - 65];
 
-                    pilhaResultado.Empilhar(operando);
+                    operacoes.Empilhar(operando);
                 }
 
+                // se o caractere for um operador
                 else
                 {
-                    double operandoDois = pilhaResultado.Desempilhar();
-                    double operandoUm = pilhaResultado.Desempilhar();
+                    // desempilha os operandos em ordem
+                    double operandoDois = operacoes.Desempilhar();
+                    double operandoUm = operacoes.Desempilhar();
 
-                    double resultado = 0;
+                    double operacao = 0;
 
+                    // switch para realização da operação entre
+                    // operando um, operador e operando dois
                     switch (caractere)
                     {
                         case '+':
-                            resultado = operandoUm + operandoDois;
+                            operacao = operandoUm + operandoDois;
                             break;
                         case '-':
-                            resultado = operandoUm - operandoDois;
+                            operacao = operandoUm - operandoDois;
                             break;
                         case '*':
-                            resultado = operandoUm * operandoDois;
+                            operacao = operandoUm * operandoDois;
                             break;
                         case '/':
-                            resultado = operandoUm / operandoDois;
+                            operacao = operandoUm / operandoDois;
                             break;
                         case '^':
-                            resultado = Math.Pow(operandoUm, operandoDois);
+                            operacao = Math.Pow(operandoUm, operandoDois);
                             break;
                     }
 
-                    pilhaResultado.Empilhar(resultado);
+                    operacoes.Empilhar(operacao);
                 }
             }
 
-            return pilhaResultado.Desempilhar();
+            // o resultado do cálculo da expressão é a operação
+            // remanescente na pilha de operações
+            return operacoes.Desempilhar();
         }
 
+        // evento clique do botão "clear" ou "C"
         private void btnLimpar_Click(object sender, EventArgs e)
         {
             LimparCampos();
         }
 
+        // método para limpar os campos relacionados à calculadora
         private void LimparCampos()
         {
             txtVisor.Clear();
