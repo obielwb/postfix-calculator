@@ -96,11 +96,11 @@ namespace CalculadoraPosfixa
                 // conversão da expressão infixa para pósifxa
                 string posfixa = ConverterParaPosfixa(infixa);
                 // calculo do resultado da expressão a partir
-                // da expressão pósfixa e do vetor de valores
+                // da expressão posfixa e do vetor de valores
                 double resultado = CalcularResultado(posfixa, valores);
 
                 // exibição dos resultados
-                lbSequencias.Text = $"Infixa: {infixa} Pósfixa: {posfixa}";
+                lbSequencias.Text = $"Infixa: {infixa} posfixa: {posfixa}";
                 txtResultado.Text = resultado.ToString();
             }
         }
@@ -201,7 +201,7 @@ namespace CalculadoraPosfixa
         }
 
 
-        // método para conversão de uma expressão infixa para pósfixa
+        // método para conversão de uma expressão infixa para posfixa
         private string ConverterParaPosfixa(string infixa)
         {
             string posfixa = "";
@@ -226,7 +226,7 @@ namespace CalculadoraPosfixa
                     else if (caractere == ')')
                     {
                         // enquanto não haver balanceamento, 
-                        // concatena-se o desempilhamento na expressão pósfixa
+                        // concatena-se o desempilhamento na expressão posfixa
                         while (!operadores.EstaVazia && operadores.Topo() != '(')
                             posfixa += operadores.Desempilhar();
 
@@ -238,7 +238,7 @@ namespace CalculadoraPosfixa
                     {
                         // enquanto a pilha não estiver vazia e a precedência do operador
                         // for menor ou igual que a precedência do topo da pilha,
-                        // concatena-se o desempilhamento na expressão pósfixa
+                        // concatena-se o desempilhamento na expressão posfixa
                         while (
                             !operadores.EstaVazia &&
                             Precedencia(caractere) <= Precedencia(operadores.Topo())
@@ -254,7 +254,7 @@ namespace CalculadoraPosfixa
             while (!operadores.EstaVazia)
                 posfixa += operadores.Desempilhar();
 
-            // retorno da expressão infixa convertida para pósfixa
+            // retorno da expressão infixa convertida para posfixa
             return posfixa;
         }
 
@@ -279,10 +279,10 @@ namespace CalculadoraPosfixa
         }
 
         // método para calcular o resultado de uma dada expressão
-        // pósfixa através de seu vetor de valores
+        // posfixa através de seu vetor de valores
         private double CalcularResultado(string posfixa, double[] valores)
         {
-            // percorrimento da expressão pósfixa para o tratamento
+            // percorrimento da expressão posfixa para o tratamento
             // de operadores unários negativos
             for (int i = 0; i < posfixa.Length; ++i)
                 // se há um operador unário negativo na posição i
@@ -297,13 +297,13 @@ namespace CalculadoraPosfixa
                     valores[j] = -1 * valores[j];
                 }
 
-            // remoção dos operadores unários negativos da expressão pósfixa
+            // remoção dos operadores unários negativos da expressão posfixa
             posfixa = posfixa.Replace("@", "");
 
             // pilha de operações
             PilhaVetor<double> operacoes = new PilhaVetor<double>();
 
-            // percorrimento da expressão pósfixa para realização do cálculo
+            // percorrimento da expressão posfixa para realização do cálculo
             foreach (char caractere in posfixa)
             {
                 // se o caractere for uma letra, representando um valor
@@ -365,7 +365,7 @@ namespace CalculadoraPosfixa
         {
             txtVisor.Clear();
             txtResultado.Clear();
-            lbSequencias.Text = "Infixa: --- Pósfixa: ---";
+            lbSequencias.Text = "Infixa: --- Posfixa: ---";
         }
     }
 }
