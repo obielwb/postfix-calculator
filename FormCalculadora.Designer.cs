@@ -297,20 +297,20 @@
             this.lbUnarios.AutoSize = true;
             this.lbUnarios.Location = new System.Drawing.Point(37, 87);
             this.lbUnarios.Name = "lbUnarios";
-            this.lbUnarios.Size = new System.Drawing.Size(295, 13);
+            this.lbUnarios.Size = new System.Drawing.Size(303, 13);
             this.lbUnarios.TabIndex = 23;
-            this.lbUnarios.Text = "Operações unárias devem ser expressadas entre paresentes.";
+            this.lbUnarios.Text = "Operações unárias devem ser representadas entre parêsentes.";
             // 
             // lbUnariosEg
             // 
             this.lbUnariosEg.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbUnariosEg.AutoSize = true;
-            this.lbUnariosEg.Location = new System.Drawing.Point(89, 100);
+            this.lbUnariosEg.Location = new System.Drawing.Point(38, 100);
             this.lbUnariosEg.Name = "lbUnariosEg";
-            this.lbUnariosEg.Size = new System.Drawing.Size(242, 13);
+            this.lbUnariosEg.Size = new System.Drawing.Size(302, 13);
             this.lbUnariosEg.TabIndex = 24;
-            this.lbUnariosEg.Text = "E.g. -2^-2 deverá ser representado como (-2)^(-2).";
+            this.lbUnariosEg.Text = "E.g. a expressão -2^-2 deverá ser representada como (-2)^(-2).";
             // 
             // pnBotoes
             // 

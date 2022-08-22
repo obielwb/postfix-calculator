@@ -83,26 +83,27 @@ namespace CalculadoraPosfixa
         // evento click do botão "=" ou igual
         private void btnIgual_Click(object sender, EventArgs e)
         {
-            // verificação do balanceamento dos parenteses da expressão
-            if (!TemParentesesBalanceados(txtVisor.Text))
-                MessageBox.Show("A expressão não tem parênteses balanceados!");
+            string expressao = txtVisor.Text;
 
-            else
-            {
-                string expressao = txtVisor.Text;
+            if (expressao.Length > 0)
+                // verificação do balanceamento dos parenteses da expressão
+                if (!TemParentesesBalanceados(expressao))
+                    MessageBox.Show("A expressão não tem parênteses balanceados!");
 
-                // conversão da expressão regular para infixa
-                string infixa = ConverterParaInfixa(expressao, out double[] valores);
-                // conversão da expressão infixa para pósifxa
-                string posfixa = ConverterParaPosfixa(infixa);
-                // calculo do resultado da expressão a partir
-                // da expressão pósfixa e do vetor de valores
-                double resultado = CalcularResultado(posfixa, valores);
+                else
+                {
+                    // conversão da expressão regular para infixa
+                    string infixa = ConverterParaInfixa(expressao, out double[] valores);
+                    // conversão da expressão infixa para pósifxa
+                    string posfixa = ConverterParaPosfixa(infixa);
+                    // calculo do resultado da expressão a partir
+                    // da expressão pósfixa e do vetor de valores
+                    double resultado = CalcularResultado(posfixa, valores);
 
-                // exibição dos resultados
-                lbSequencias.Text = $"Infixa: {infixa} Pósfixa: {posfixa}";
-                txtResultado.Text = resultado.ToString();
-            }
+                    // exibição dos resultados
+                    lbSequencias.Text = $"Infixa: {infixa} Pósfixa: {posfixa}";
+                    txtResultado.Text = resultado.ToString();
+                }
         }
 
         // método para determinar se uma expressão tem parênteses balanceados
