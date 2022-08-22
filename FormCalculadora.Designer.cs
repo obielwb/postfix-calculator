@@ -295,7 +295,7 @@
             this.lbUnarios.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbUnarios.AutoSize = true;
-            this.lbUnarios.Location = new System.Drawing.Point(37, 87);
+            this.lbUnarios.Location = new System.Drawing.Point(33, 87);
             this.lbUnarios.Name = "lbUnarios";
             this.lbUnarios.Size = new System.Drawing.Size(303, 13);
             this.lbUnarios.TabIndex = 23;
@@ -306,11 +306,11 @@
             this.lbUnariosEg.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbUnariosEg.AutoSize = true;
-            this.lbUnariosEg.Location = new System.Drawing.Point(38, 100);
+            this.lbUnariosEg.Location = new System.Drawing.Point(43, 100);
             this.lbUnariosEg.Name = "lbUnariosEg";
-            this.lbUnariosEg.Size = new System.Drawing.Size(302, 13);
+            this.lbUnariosEg.Size = new System.Drawing.Size(293, 13);
             this.lbUnariosEg.TabIndex = 24;
-            this.lbUnariosEg.Text = "E.g. a expressão -2^-2 deverá ser representada como (-2)^(-2).";
+            this.lbUnariosEg.Text = "E.g. a expressão -2^-2 deve ser representada como (-2)^(-2).";
             // 
             // pnBotoes
             // 
