@@ -32,8 +32,6 @@ namespace CalculadoraPosfixa
 
             else if (entrada.Length > 0)
                 ValidarEntrada(entrada[entrada.Length - 1]);
-
-            txtVisor.Focus();
         }
 
         private void ValidarEntrada(char caractereDigitado)
