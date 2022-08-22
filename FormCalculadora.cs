@@ -28,7 +28,7 @@ namespace CalculadoraPosfixa
             }
 
             if (!valida)
-                txtVisor.Clear();
+                LimparCampos();
 
             else if (entrada.Length > 0)
                 ValidarEntrada(entrada[entrada.Length - 1]);
@@ -266,6 +266,11 @@ namespace CalculadoraPosfixa
         }
 
         private void btnLimpar_Click(object sender, EventArgs e)
+        {
+            LimparCampos();
+        }
+
+        private void LimparCampos()
         {
             txtVisor.Clear();
             txtResultado.Clear();
